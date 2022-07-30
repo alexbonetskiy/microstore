@@ -1,0 +1,1 @@
+MicroStore application based on Microservice architecture.
