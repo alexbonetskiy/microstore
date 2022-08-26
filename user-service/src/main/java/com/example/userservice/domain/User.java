@@ -2,9 +2,10 @@ package com.example.userservice.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.OnDelete;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -61,12 +63,6 @@ public class User implements Serializable, HasId {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-    @Override
-    public int hashCode() {
-        HashCodeBuilder hcb = new HashCodeBuilder();
-        hcb.append(email);
-        return hcb.toHashCode();
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -76,10 +72,14 @@ public class User implements Serializable, HasId {
         if (!(obj instanceof User)) {
             return false;
         }
-        User that = (User) obj;
-        EqualsBuilder eb = new EqualsBuilder();
-        eb.append(email, that.email);
-        return eb.isEquals();
+        User user = (User) obj;
+        return email.equals(user.email);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
     }
 
     @Override

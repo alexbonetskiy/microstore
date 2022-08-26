@@ -44,10 +44,11 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "created_at", insertable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "last_modified_at", nullable = false)
+    private LocalDateTime lastModifiedAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>();
 
 
@@ -55,10 +56,11 @@ public class Order implements Serializable {
     private Integer userId;
 
     @Enumerated
-    OrderStatus orderStatus;
+    private OrderStatus orderStatus;
 
     public Order(Integer userId, OrderStatus orderStatus) {
         this.userId = userId;
+        this.lastModifiedAt = LocalDateTime.now();
         this.orderStatus = orderStatus;
     }
 
@@ -79,7 +81,6 @@ public class Order implements Serializable {
         for (Iterator<OrderItem> iterator = items.iterator();
              iterator.hasNext(); ) {
             OrderItem orderItem = iterator.next();
-
             if (orderItem.getOrder().equals(this) &&
                     orderItem.getItem().equals(item)) {
                 iterator.remove();
@@ -92,9 +93,13 @@ public class Order implements Serializable {
 
 
     @PrePersist
-    public  void prePersist() {
-        if(this.orderStatus == OrderStatus.CONFIRMED)
-        createdAt = LocalDateTime.now();
+    public void prePersist() {
+        lastModifiedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        lastModifiedAt = LocalDateTime.now();
     }
 
     //https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
@@ -120,7 +125,7 @@ public class Order implements Serializable {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", createdAt=" + createdAt +
+                ", lastModifiedAt=" + lastModifiedAt +
                 ", userId=" + userId +
                 '}';
     }

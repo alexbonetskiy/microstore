@@ -1,8 +1,8 @@
-package com.alexbonetskiy.itemservice.dto;
+package com.alexbonetskiy.orderservice.dto;
 
-
-import com.alexbonetskiy.itemservice.utils.BigDecimal2JsonDeserializer;
-import com.alexbonetskiy.itemservice.utils.mapstruct.Default;
+import com.alexbonetskiy.orderservice.utils.BigDecimal2JsonDeserializer;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sun.istack.NotNull;
 import lombok.Value;
@@ -20,6 +20,7 @@ public class ItemTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 100L;
 
+    @NotNull
     Integer id;
 
     @NotBlank
@@ -37,23 +38,12 @@ public class ItemTO implements Serializable {
 
     String exception;
 
-    @Default
-    public ItemTO(Integer id, @NotBlank @Size(max = 30) String name, @NotBlank @Size(max = 256) String description, @Positive BigDecimal price) {
+    @JsonCreator
+    public ItemTO(@JsonProperty("id") Integer id,@JsonProperty("name") @NotBlank @Size(max = 30) String name,@JsonProperty("description") @NotBlank @Size(max = 256) String description, @JsonProperty("price")  @Positive BigDecimal price,@JsonProperty("exception") String exception) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.exception = null;
-    }
-
-    public ItemTO(String exception) {
-        this.id = null;
-        this.name = null;
-        this.description = null;
-        this.price = null;
         this.exception = exception;
-
     }
-
-
 }

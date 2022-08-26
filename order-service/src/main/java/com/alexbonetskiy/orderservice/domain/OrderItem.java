@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.io.Serial;
@@ -20,18 +21,18 @@ public class OrderItem implements Serializable {
     private static final long serialVersionUID = 100L;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @JsonBackReference
     private Order order;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
 
     @NotNull
-    @Positive
+    @Min(value = 0)
     private int quantity;
 
     public OrderItem(Order order, Item item) {
@@ -46,7 +47,7 @@ public class OrderItem implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (o == null || getClass() != o.getClass())
+        if (!(o instanceof OrderItem))
             return false;
 
         OrderItem that = (OrderItem) o;

@@ -1,4 +1,4 @@
-package com.example.userservice.controller;
+package com.example.userservice.web;
 
 import com.example.userservice.domain.User;
 import com.example.userservice.service.UserService;

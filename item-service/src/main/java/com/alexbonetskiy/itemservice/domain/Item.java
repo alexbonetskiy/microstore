@@ -1,17 +1,17 @@
 package com.alexbonetskiy.itemservice.domain;
 
+import com.alexbonetskiy.itemservice.utils.BigDecimal2JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -40,9 +40,11 @@ public class Item implements Serializable, HasId {
     @Column(nullable = false)
     @NotNull
     @Positive
+    @JsonDeserialize(using = BigDecimal2JsonDeserializer.class)
     private BigDecimal price;
 
     @NotNull
+    @Min(value = 0)
     private int quantity;
 
 
@@ -53,16 +55,15 @@ public class Item implements Serializable, HasId {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
-        if (!(o instanceof Item other))
-            return false;
-
-        return id != null && id.equals(other.getId());
+        if (!(o instanceof Item)) return false;
+        Item item = (Item) o;
+        return id.equals(item.id) && name.equals(item.name) && description.equals(item.description) && price.equals(item.price);
     }
+
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, name, description, price);
     }
 
     @Override
@@ -78,6 +79,6 @@ public class Item implements Serializable, HasId {
 
     @Override
     public boolean isNew() {
-        return id != null;
+        return id == null;
     }
 }

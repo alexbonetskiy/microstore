@@ -1,12 +1,7 @@
 package com.alexbonetskiy.orderservice.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,6 +10,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class OrderItemId implements Serializable {
 
     @Serial
@@ -28,7 +24,7 @@ public class OrderItemId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (o == null || getClass() != o.getClass())
+        if (!(o instanceof OrderItemId))
             return false;
 
         OrderItemId that = (OrderItemId) o;

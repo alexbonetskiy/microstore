@@ -1,4 +1,4 @@
-package com.alexbonetskiy.itemservice.controller;
+package com.alexbonetskiy.itemservice.web;
 
 import com.alexbonetskiy.itemservice.domain.Item;
 import com.alexbonetskiy.itemservice.dto.ItemTO;
@@ -55,11 +55,33 @@ public class ItemController {
     public void update(@Valid @RequestBody Item item, @PathVariable int id) {
         log.info("update {}", id);
         assureIdConsistent(item, id);
-        itemService.save(item);
+        itemService.update(item);
     }
 
-    @PostMapping(value = "/basket", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ItemTO addToOrder(@RequestParam int id, @RequestParam int qty) {
-        return itemService.addToOrder(id, qty);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteItem(@PathVariable int id) {
+        log.info("delete item {}", id);
+        itemService.deleteItem(id);
     }
+
+    @GetMapping("/basket")
+    public ItemTO addItemToOrder(@RequestParam int id, @RequestParam int qty) {
+        log.info("add item {} with quantity {} to order", id, qty);
+        return itemService.addItemToOrder(id, qty);
+    }
+
+    @PostMapping(value = "/basket/confirm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ItemTO reserveItem(@RequestParam int id, @RequestParam int qty) {
+        log.info("reserve item {} with quantity {}", id, qty);
+        return itemService.reserveItem(id, qty);
+    }
+
+    @PostMapping(value = "/items/basket/reject", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void rejectPurchase(@RequestParam int id, @RequestParam int qty) {
+        log.info("reject item {} with quantity {}", id, qty);
+        itemService.rejectPurchase(id, qty);
+    }
+
+
 }
