@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  config-server:
+    build: config-server
+    ports:
+      - "8888:8888"
+
+
+  api-gateway:
+    build: api-gateway
+
+
+  service-registry:
+    build: service-registry
+
+  item-service:
+    build: item-service
+    ports:
+      - "8001:8001"
+
+  order-service:
+    build: order-service
+    ports:
+      - "8002:8002"
+
+  user-service:
+    build: user-service
+    ports:
+      - "8003:8003"
+
+
+

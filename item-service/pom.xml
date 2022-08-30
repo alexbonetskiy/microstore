@@ -73,7 +73,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <finalName>item-service</finalName>
-
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

@@ -13,3 +13,10 @@ spring:
 
 server:
   port: 8888
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka/

@@ -1,0 +1,37 @@
+version: '3.3'
+services:
+  config-server:
+    image: alexbonetskiy/microstore-config-server
+
+  api-gateway:
+    image: alexbonetskiy/microstore-api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - config-server
+
+  service-registry:
+    image: alexbonetskiy/microstore-service-registry
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+
+
+  item-service:
+    image: alexbonetskiy/microstore-item-service
+    depends_on:
+      - config-server
+
+
+  order-service:
+    image: alexbonetskiy/microstore-order-service
+    depends_on:
+      - config-server
+
+  user-service:
+    image: alexbonetskiy/microstore-user-service
+    depends_on:
+      - config-server
+
+
