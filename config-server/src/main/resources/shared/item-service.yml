@@ -26,3 +26,24 @@ spring:
     getter: none
     setter: none
     is-getter: none
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://user-service:8003/oauth2/jwks
+      client:
+        registration:
+          item-service:
+            provider: spring
+            client-id: item-service
+            client-secret: ${ITEM_SERVICE_PASSWORD}
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: client_credentials
+            scope: server
+        provider:
+          spring:
+            authorization-uri: http://user-service:8003/oauth2/authorize
+            token-uri: http://user-service:8003/oauth2/token
+            jwk-set-uri: http://user-service:8003/oauth2/jwks

@@ -1,6 +1,8 @@
 server:
   port: 8000
 
+
+
 spring:
   cloud:
     gateway:
@@ -9,13 +11,39 @@ spring:
           uri: lb://item-service
           predicates:
             - Path=/items/**
+          filters:
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
 
         - id: order-service
           uri: lb://order-service
           predicates:
             - Path=/orders/**
+          filters:
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
 
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/users/**
+            - Path=/users/**, /profile/**
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          api-gateway:
+            provider: spring
+            client-id: api-gateway
+            client-secret: ${API_GATEWAY_PASSWORD}
+            client-authentification-method: client_secret_basic
+            authorization-grant-type: authorization_code
+            redirect-uri: http://api-gateway:8000/login/oauth2/code/api-gateway
+            scope: openid
+            client-name: spring
+        provider:
+          spring:
+              authorization-uri: http://user-service:8003/oauth2/authorize
+              token-uri: http://user-service:8003/oauth2/token
+              jwk-set-uri: http://user-service:8003/oauth2/jwks

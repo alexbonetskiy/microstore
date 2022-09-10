@@ -6,5 +6,17 @@ spring:
   cloud:
     config:
       fail-fast: true
+      password: ${CONFIG_SERVER_PASSWORD}
+      username: user
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security.web.FilterChainProxy: DEBUG
+
+
+
 
 

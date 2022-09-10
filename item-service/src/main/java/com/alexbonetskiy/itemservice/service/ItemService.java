@@ -7,6 +7,7 @@ import com.alexbonetskiy.itemservice.repository.ItemRepository;
 import com.alexbonetskiy.itemservice.utils.mapstruct.ItemMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,6 @@ public class ItemService {
     public void deleteItem(int id) {
         log.info("delete item {}", id);
         checkModification(itemRepository.delete(id), id);
-        orderServiceClient.deleteItemFromCurrentOrders(id);
     }
 
     @Transactional

@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "item-service")
 public interface ItemServiceClient {
 
-    @GetMapping("/items/basket")
+    @GetMapping(value = "/items/basket", produces = MediaType.APPLICATION_JSON_VALUE)
     ItemTO getItemToOrder(@RequestParam int id, @RequestParam int qty);
 
-    @PostMapping(value = "/items/basket/confirm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/items/basket/confirm")
     ItemTO reserveItem(@RequestParam int id, @RequestParam int qty);
 
-    @PostMapping(value = "/items/basket/reject", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/items/basket/reject")
     void rejectPurchase(@RequestParam int id, @RequestParam int qty);
 }
 

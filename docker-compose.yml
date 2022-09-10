@@ -1,37 +1,76 @@
 version: '3.3'
 services:
   config-server:
+    environment:
+        CONFIG_SERVER_PASSWORD: $CONFIG_SERVER_PASSWORD
+        API_GATEWAY_PASSWORD: $API_GATEWAY_PASSWORD
+        ITEM_SERVICE_PASSWORD: $ITEM_SERVICE_PASSWORD
+        ORDER_SERVICE_PASSWORD: $ORDER_SERVICE_PASSWORD
     image: alexbonetskiy/microstore-config-server
+    networks:
+      - microstore
 
   api-gateway:
+    environment:
+      API_GATEWAY_PASSWORD: $API_GATEWAY_PASSWORD
+      CONFIG_SERVER_PASSWORD: $CONFIG_SERVER_PASSWORD
     image: alexbonetskiy/microstore-api-gateway
     ports:
       - "8000:8000"
     depends_on:
       - config-server
+    networks:
+      - microstore
 
   service-registry:
+    environment:
+      CONFIG_SERVER_PASSWORD: $CONFIG_SERVER_PASSWORD
     image: alexbonetskiy/microstore-service-registry
     ports:
       - "8761:8761"
     depends_on:
       - config-server
+    networks:
+      - microstore
 
 
   item-service:
+    environment:
+      CONFIG_SERVER_PASSWORD: $CONFIG_SERVER_PASSWORD
+      ITEM_SERVICE_PASSWORD: $ITEM_SERVICE_PASSWORD
     image: alexbonetskiy/microstore-item-service
     depends_on:
       - config-server
+    networks:
+      - microstore
 
 
   order-service:
+    environment:
+      CONFIG_SERVER_PASSWORD: $CONFIG_SERVER_PASSWORD
+      ORDER_SERVICE_PASSWORD: $ORDER_SERVICE_PASSWORD
     image: alexbonetskiy/microstore-order-service
     depends_on:
       - config-server
+    networks:
+      - microstore
 
   user-service:
+    environment:
+      CONFIG_SERVER_PASSWORD: $CONFIG_SERVER_PASSWORD
+      API_GATEWAY_PASSWORD: $API_GATEWAY_PASSWORD
+      ITEM_SERVICE_PASSWORD: $ITEM_SERVICE_PASSWORD
+      ORDER_SERVICE_PASSWORD: $ORDER_SERVICE_PASSWORD
     image: alexbonetskiy/microstore-user-service
+    ports:
+      - "8003:8003"
     depends_on:
       - config-server
+    networks:
+      - microstore
+
+networks:
+  microstore:
+    driver: bridge
 
 

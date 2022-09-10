@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,6 +40,7 @@ public class ItemController {
         return ResponseEntity.of(itemService.getItemById(id));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Item> createWithLocation(@Valid @RequestBody Item item) {
         log.info("create {}", item);
@@ -50,6 +52,7 @@ public class ItemController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Item item, @PathVariable int id) {
@@ -58,6 +61,7 @@ public class ItemController {
         itemService.update(item);
     }
 
+   @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteItem(@PathVariable int id) {
@@ -65,19 +69,22 @@ public class ItemController {
         itemService.deleteItem(id);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_openid')")
     @GetMapping("/basket")
     public ItemTO addItemToOrder(@RequestParam int id, @RequestParam int qty) {
         log.info("add item {} with quantity {} to order", id, qty);
         return itemService.addItemToOrder(id, qty);
     }
 
-    @PostMapping(value = "/basket/confirm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('SCOPE_server')")
+    @PostMapping(value = "/basket/confirm")
     public ItemTO reserveItem(@RequestParam int id, @RequestParam int qty) {
         log.info("reserve item {} with quantity {}", id, qty);
         return itemService.reserveItem(id, qty);
     }
 
-    @PostMapping(value = "/items/basket/reject", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('SCOPE_server')")
+    @PostMapping(value = "/items/basket/reject")
     public void rejectPurchase(@RequestParam int id, @RequestParam int qty) {
         log.info("reject item {} with quantity {}", id, qty);
         itemService.rejectPurchase(id, qty);

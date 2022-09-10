@@ -6,7 +6,10 @@ spring:
   cloud:
     config:
       fail-fast: true
+      password: ${CONFIG_SERVER_PASSWORD}
+      username: user
 
 
 
 
+logging.level.org.springframework.security: DEBUG

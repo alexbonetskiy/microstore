@@ -53,14 +53,14 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderTO addItemToOrder(int itemId, int qty) {
+    public OrderTO addItemToOrder(int itemId, int qty, int userId) {
         log.info("add item id={}, quantity={}", itemId, qty);
         ItemTO itemTO = itemServiceClient.getItemToOrder(itemId, qty);
         if (itemTO.getException() != null) throw new IllegalRequestDataException(itemTO.getException());
         else {
             Item item = getActualItemFromDb(itemTO);
             Optional<Order> optionalOrder = orderRepository.getByUserIdAndOrderStatus(1);
-            Order order = optionalOrder.orElse(new Order(1, OrderStatus.CURRENT));
+            Order order = optionalOrder.orElse(new Order(userId, OrderStatus.CURRENT));
             List<OrderItem> orderItemList = order.getItems();
             for (OrderItem orderItem : orderItemList) {
                 if (orderItem.getItem().equals(item)) {
@@ -74,9 +74,9 @@ public class OrderService {
     }
 
     @Transactional
-    public void deleteItemFromOrder(int itemId) {
-        log.info("delete item id={}", itemId);
-        Optional<Order> optionalOrder = orderRepository.getByUserIdAndOrderStatus(1);
+    public void deleteItemFromOrder(int itemId, int userId) {
+        log.info("delete item id={} from basket of userId={}", itemId, userId);
+        Optional<Order> optionalOrder = orderRepository.getByUserIdAndOrderStatus(userId);
         Order order = optionalOrder.orElseThrow(() -> new IllegalRequestDataException("Basket is empty"));
         List<OrderItem> orderItemList = new ArrayList<>();
         for (OrderItem orderItem : order.getItems()) {
@@ -95,9 +95,9 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderTO confirmOrder() {
+    public OrderTO confirmOrder(int userId) {
         log.info("confirm order");
-        Optional<Order> optionalOrder = orderRepository.getByUserIdAndOrderStatus(1);
+        Optional<Order> optionalOrder = orderRepository.getByUserIdAndOrderStatus(userId);
         Order order = optionalOrder.orElseThrow(() -> new IllegalRequestDataException("Basket is empty"));
         if (order.getItems().isEmpty()) throw new IllegalRequestDataException("Basket is empty");
         int counter = 0;
@@ -148,4 +148,5 @@ public class OrderService {
             return itemRepository.save(item);
         }
     }
+
 }

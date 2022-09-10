@@ -21,3 +21,25 @@ spring:
     username: sa
     password:
   h2.console.enabled: true
+
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://user-service:8003/oauth2/jwks
+      client:
+        registration:
+          order-service:
+            provider: spring
+            client-id: order-service
+            client-secret: ${ORDER_SERVICE_PASSWORD}
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: client_credentials
+            scope: server
+        provider:
+          spring:
+            authorization-uri: http://user-service:8003/oauth2/authorize
+            token-uri: http://user-service:8003/oauth2/token
+            jwk-set-uri: http://user-service:8003/oauth2/jwks

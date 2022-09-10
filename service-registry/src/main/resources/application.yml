@@ -6,6 +6,8 @@ spring:
   cloud:
     config:
       fail-fast: true
+      password: ${CONFIG_SERVER_PASSWORD}
+      username: user
 
 
 
@@ -15,3 +17,5 @@ eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+
+
