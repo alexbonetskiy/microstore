@@ -2,7 +2,7 @@ Microstore is a REST API for web store based on microservice architecture with S
 
 ![microstore](https://user-images.githubusercontent.com/85827016/191137693-d08cc63d-df0a-4482-b527-ac708e760965.jpg)
 
-Consist of the following microservices: 
+Consists of the following microservices: 
  - api gateway,
  - service registry,
  - configuration server,
@@ -13,7 +13,7 @@ Consist of the following microservices:
 Inter service communication is synchronous through Feign client.
 Each microservice has its own H2 database, in-memory implementation for test simplicity.
 
-####User service
+#### User service
 
 The user service acts as authorization service and provides simple user management service.
 Service is used for user authentication (SSO) and authorization via OAuth2 token.
@@ -31,7 +31,7 @@ DELETE| /users/{id}| Delete specified user| ADMIN
 PUT| /users/{id}| Update specified user info| ADMIN
 
 
-####Order service
+#### Order service
 
 The order service allows to manage the Shopping Basket/Cart. It also allows the user to retrieve their order history.
 
@@ -45,7 +45,7 @@ POST| /orders/current?id={itemId}&quantity={qty}| Add item to basket |
 DELETE| /orders/current?id={itemId} | Delete item from basket|
 POST| /orders/current/confirm | Confirm order |
 
-####Item service
+#### Item service
 
 This service represents item catalog.
 
@@ -60,7 +60,7 @@ DELETE| /items/{id} | Delete specified item| ADMIN
 PUT| /items/{id} | Update specified item | ADMIN
 
 
-####Build and start
+#### Build and start
 
  - Install Docker and Docker Compose
 
@@ -73,4 +73,5 @@ If you'd like to start applications in Intellij Idea you need to export environm
 All request goes through api gateway service - http://localhost:8000.
 To look all registered services - http://localhost:8761 (Eureka Dashboard).
 
-
+Credentials: admin@gmail.com:admin; user@gmail.com:user. 
+            
