@@ -14,6 +14,4 @@ public interface OrderServiceClient {
     @PostMapping(value = "/orders/current", consumes = MediaType.APPLICATION_JSON_VALUE)
     void updateItemInCurrentOrders(@RequestBody ItemTO itemTO);
 
-    @DeleteMapping("/orders/current/basket/{id}")
-    void deleteItemFromCurrentOrders(@PathVariable int id);
 }

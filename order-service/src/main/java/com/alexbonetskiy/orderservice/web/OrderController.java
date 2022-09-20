@@ -46,9 +46,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.addItemToOrder(itemId, qty, Integer.parseInt((String) jwt.getClaims().get("user_id"))));
     }
 
-    @DeleteMapping("/current/basket/{id}")
+    @DeleteMapping("/current/basket")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteItemFromOrder(@PathVariable("id") int itemId, @AuthenticationPrincipal Jwt jwt) {
+    public void deleteItemFromOrder(@RequestParam("id") int itemId, @AuthenticationPrincipal Jwt jwt) {
         log.info("delete item id={} from basket of userId={}", itemId, jwt.getClaims().get("user_id"));
         orderService.deleteItemFromOrder(itemId, Integer.parseInt((String) jwt.getClaims().get("user_id")));
     }
